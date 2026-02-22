@@ -71,7 +71,7 @@ def main():
         r.encoding = r.apparent_encoding
         
         # 文言が消えたら在庫あり！
-        if "検索条件に一致する商品はありません。" not in r.text:
+        if "テスト用のありえない言葉" not in r.text:
             # 別のページに飛ばされていないかの安全チェック
             if "局所麻酔剤" in r.text or "FEED" in r.text:
                 print(f"〇 変化あり（在庫復活の可能性！）: {TARGET_URL}")
