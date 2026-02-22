@@ -1,0 +1,30 @@
+name: FEED Dental Stock Check
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  run-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: コードの読み込み
+        uses: actions/checkout@v4
+
+      - name: Pythonの準備
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 道具（ライブラリ）のインストール
+        run: pip install requests beautifulsoup4
+
+      - name: FEED在庫チェックプログラムの実行
+        env:
+          FEED_ID: ${{ secrets.FEED_ID }}
+          FEED_PASS: ${{ secrets.FEED_PASS }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+          RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+        run: python feed_check.py
