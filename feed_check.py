@@ -28,63 +28,109 @@ GMAIL_ADDRESS = os.getenv("GMAIL_ADDRESS")
 GMAIL_APP_PASS = os.getenv("GMAIL_APP_PASS")
 RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL")
 
+# =========================================================
+# ★ 監視リスト（一覧ページ1個 ＋ 個別ページ6個）
+# =========================================================
+TARGET_LIST = [
+    {
+        "name": "【一覧】局所麻酔剤",
+        "url": "https://dental.feed.jp/catalog/dental/category/291010/?a=1&mode=&keyword=&category_id=291010&page=&sort_order=&perpage=20&display=desc&b=dental&businessCategory=&categoryType=1&searchType=1&brandCode=&mediaCode=&catalogPage=&narrowCategory=&narrowCategoryName=&resultsSelectedIndex=&resultsDataSize=7&sortLimitList=20&sortTypeList=no_order&narrowStock=0",
+        "ng_word": "検索条件に一致する商品はありません。"
+    },
+    {
+        "name": "【個別】オーラ注（003000020）",
+        "url": "https://dental.feed.jp/product/003000020/",
+        "ng_word": "在庫切れ"
+    },
+    {
+        "name": "【個別】追加商品1（003000060）",
+        "url": "https://dental.feed.jp/product/003000060/",
+        "ng_word": "在庫切れ"
+    },
+    {
+        "name": "【個別】追加商品2（003000030）",
+        "url": "https://dental.feed.jp/product/003000030/",
+        "ng_word": "在庫切れ"
+    },
+    {
+        "name": "【個別】追加商品3（003000450）",
+        "url": "https://dental.feed.jp/product/003000450/",
+        "ng_word": "在庫切れ"
+    },
+    {
+        "name": "【個別】追加商品4（1000040390）",
+        "url": "https://dental.feed.jp/product/1000040390/",
+        "ng_word": "在庫切れ"
+    },
+    {
+        "name": "【個別】追加商品5（003000310）",
+        "url": "https://dental.feed.jp/product/003000310/",
+        "ng_word": "在庫切れ"
+    }
+]
+
 def main():
     session = requests.Session()
     session.mount('https://', CustomSSLAdapter())
-    
+
     session.headers.update({
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Accept-Language": "ja-JP,ja;q=0.9"
     })
-    
+
     print("ログイン処理を開始します...")
     try:
         login_url = "https://dental.feed.jp/Login.jsp" 
         res = session.get(login_url, timeout=10)
         soup = BeautifulSoup(res.text, "html.parser")
-        
+
         # ページ内の隠し鍵（tokenなど）をすべて自動回収
         login_data = {}
         for input_tag in soup.find_all("input"):
             if input_tag.has_attr("name"):
                 login_data[input_tag["name"]] = input_tag.get("value", "")
-        
-        # Kさんが暴き出したIDとパスワードの箱に、金庫の鍵を入れる
+
         login_data["loginId"] = FEED_ID
         login_data["password"] = FEED_PASS
-        
+
         # ログイン実行
         session.post(login_url, data=login_data, timeout=10)
         print("ログイン通信完了")
         time.sleep(2) # サーバーに負荷をかけないよう少し待つ
-        
+
     except Exception as e:
         print(f"ログイン処理でエラー: {e}")
         sys.exit(1)
 
-    # 監視したいFEEDのURL
-    TARGET_URL = "https://dental.feed.jp/catalog/dental/category/291010/?a=1&mode=&keyword=&category_id=291010&page=&sort_order=&perpage=20&display=desc&b=dental&businessCategory=&categoryType=1&searchType=1&brandCode=&mediaCode=&catalogPage=&narrowCategory=&narrowCategoryName=&resultsSelectedIndex=&resultsDataSize=7&sortLimitList=20&sortTypeList=no_order&narrowStock=0"
+    found_items = [] # 復活した商品を貯めておくリスト
 
-    print("在庫チェック中...")
-    try:
-        r = session.get(TARGET_URL, timeout=10)
-        r.encoding = r.apparent_encoding
-        
-        # 文言が消えたら在庫あり！
-        if "検索条件に一致する商品はありません。" not in r.text:
-            # 別のページに飛ばされていないかの安全チェック
-            if "局所麻酔剤" in r.text or "FEED" in r.text:
-                print(f"〇 変化あり（在庫復活の可能性！）: {TARGET_URL}")
-                send_email([TARGET_URL])
+    # 監視リストを上から順番にチェックしていく
+    for target in TARGET_LIST:
+        print(f"[{target['name']}] の在庫チェック中...")
+        try:
+            r = session.get(target["url"], timeout=10)
+            r.encoding = r.apparent_encoding
+
+            # 指定した「NGワード」が画面から消えていたら復活とみなす
+            if target["ng_word"] not in r.text:
+                if "FEED" in r.text: # 別のページに飛ばされていないかの安全チェック
+                    print(f"〇 変化あり（在庫復活の可能性！）: {target['name']}")
+                    found_items.append(f"・{target['name']}\n  {target['url']}\n")
+                else:
+                    print(f"× ログイン失敗か別ページに飛ばされています: {target['name']}")
             else:
-                print("× ログインに失敗して別のページに飛ばされているようです。")
-        else:
-            print(f"× 在庫なし（文言確認）: {TARGET_URL}")
-    except Exception as e:
-        print(f"取得失敗: {e}")
+                print(f"× 在庫なし（文言確認）: {target['name']}")
+        except Exception as e:
+            print(f"取得失敗 ({target['name']}): {e}")
+        
+        time.sleep(2) # 連続アクセスで目をつけられないように2秒休憩
+
+    # 1つでも復活した商品があればメールを飛ばす
+    if found_items:
+        send_email(found_items)
 
 def send_email(items):
-    msg = MIMEText("FEEDデンタルで在庫復活の可能性があります！\n\n" + "\n".join(items))
+    msg = MIMEText("FEEDデンタルで以下の在庫が復活した可能性があります！\n\n" + "\n".join(items))
     msg['Subject'] = "【FEED通知】在庫復活の可能性あり"
     msg['From'] = GMAIL_ADDRESS
     msg['To'] = RECEIVER_EMAIL
