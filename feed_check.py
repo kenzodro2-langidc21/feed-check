@@ -40,32 +40,32 @@ TARGET_LIST = [
     {
         "name": "【個別】オーラ注（003000020）",
         "url": "https://dental.feed.jp/product/003000020/",
-        "ng_word": "在庫切れ"
+        "ng_word": "この商品は現在購入できません。"
     },
     {
         "name": "【個別】追加商品1（003000060）",
         "url": "https://dental.feed.jp/product/003000060/",
-        "ng_word": "在庫切れ"
+        "ng_word": "この商品は現在購入できません。"
     },
     {
         "name": "【個別】追加商品2（003000030）",
         "url": "https://dental.feed.jp/product/003000030/",
-        "ng_word": "在庫切れ"
+        "ng_word": "この商品は現在購入できません。"
     },
     {
         "name": "【個別】追加商品3（003000450）",
         "url": "https://dental.feed.jp/product/003000450/",
-        "ng_word": "在庫切れ"
+        "ng_word": "この商品は現在購入できません。"
     },
     {
         "name": "【個別】追加商品4（1000040390）",
         "url": "https://dental.feed.jp/product/1000040390/",
-        "ng_word": "在庫切れ"
+        "ng_word": "この商品は現在購入できません。"
     },
     {
         "name": "【個別】追加商品5（003000310）",
         "url": "https://dental.feed.jp/product/003000310/",
-        "ng_word": "在庫切れ"
+        "ng_word": "この商品は現在購入できません。"
     }
 ]
 
