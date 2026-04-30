@@ -37,6 +37,11 @@ TARGET_LIST = [
         "url": "https://dental.feed.jp/catalog/dental/category/291010/?a=1&mode=&keyword=&category_id=291010&page=&sort_order=&perpage=20&display=desc&b=dental&businessCategory=&categoryType=1&searchType=1&brandCode=&mediaCode=&catalogPage=&narrowCategory=&narrowCategoryName=&resultsSelectedIndex=&resultsDataSize=7&sortLimitList=20&sortTypeList=no_order&narrowStock=0",
         "ng_word": "検索条件に一致する商品はありません。"
     },
+       {
+        "name": "ラテックスグローブ一覧",
+        "url": "https://dental.feed.jp/catalog/dental/category/111025/?a=1&mode=&keyword=&category_id=111025&page=&sort_order=&perpage=20&display=desc&b=dental&businessCategory=&categoryType=1&searchType=1&brandCode=&mediaCode=&catalogPage=&narrowCategory=%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%96%E3%83%BB%E3%83%9E%E3%82%B9%E3%82%AF%E3%83%BB%E3%82%A2%E3%82%A4%E3%83%97%E3%83%AD%E3%83%86%E3%82%AF%E3%82%BF%E3%83%BC%3A%E3%83%A9%E3%83%86%E3%83%83%E3%82%AF%E3%82%B9%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%96%3A%E3%83%A9%E3%83%86%E3%83%83%E3%82%AF%E3%82%B9%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%96+%E3%83%91%E3%82%A6%E3%83%80%E3%83%BC%E3%83%95%E3%83%AA%E3%83%BC%28%E4%BD%9C%E6%A5%AD%E7%94%A8%29&narrowCategoryName=%E3%83%A9%E3%83%86%E3%83%83%E3%82%AF%E3%82%B9%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%96+%E3%83%91%E3%82%A6%E3%83%80%E3%83%BC%E3%83%95%E3%83%AA%E3%83%BC%28%E4%BD%9C%E6%A5%AD%E7%94%A8%29&resultsSelectedIndex=&resultsDataSize=20&sortLimitList=20&sortTypeList=no_order&resultsShowPageNumber=1&narrowStock=0,
+        "ng_word": "検索条件に一致する商品はありません。"
+    },
     {
         "name": "【個別】オーラ注（003000020）",
         "url": "https://dental.feed.jp/product/003000020/",
