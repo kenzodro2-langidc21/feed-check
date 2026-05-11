@@ -43,11 +43,6 @@ TARGET_LIST = [
         "ng_word": "検索条件に一致する商品はありません。"
     },
     {
-        "name": "【個別】オーラ注（003000020）",
-        "url": "https://dental.feed.jp/product/003000020/",
-        "ng_word": "この商品は現在購入できません。"
-    },
-    {
         "name": "【個別】追加商品1（003000060）",
         "url": "https://dental.feed.jp/product/003000060/",
         "ng_word": "この商品は現在購入できません。"
